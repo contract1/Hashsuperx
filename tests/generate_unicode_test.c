@@ -1,14 +1,12 @@
 /*
- * Generates a Unicode test for xxhsum without using Unicode in the source files.
- *
- * Copyright (C) 2020 Devin Hussey (easyaspi314)
+ * Generates a Unicode test for xxhsum without using Unicode in the source files. *
+ * Copyright (C) 2019 Marcelo Becker 
  *
  * BSD 2-Clause License (https://www.opensource.org/licenses/bsd-license.php)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- *
  *     * Redistributions of source code must retain the above copyright
  * notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
@@ -62,7 +60,6 @@ static const wchar_t WFILENAME[] = { 0x30e6, 0x30cb, 0x30b3, 0x30fc, 0x30c9, L'.
 int main(void)
 {
     FILE *f, *script, *checksum;
-
     /* Create our Unicode file. Use _wfopen on Windows as fopen doesn't support Unicode filenames. */
 #ifdef _WIN32
     if (!(f = _wfopen(WFILENAME, L"wb"))) return 1;
@@ -71,7 +68,6 @@ int main(void)
 #endif
     fprintf(f, "test\n");
     fclose(f);
-
     /* XXH64 checksum file with the precalculated checksum for said file. */
     if (!(checksum = fopen("unicode_test.xxh64", "wb")))
         return 1;
@@ -80,7 +76,6 @@ int main(void)
 
 
     /* Create two scripts for both Windows and Unix. */
-
     /* Generate a Windows batch script. Always insert CRLF manually. */
     if (!(script = fopen("unicode_test.bat", "wb")))
         return 1;
@@ -105,7 +100,6 @@ int main(void)
     fprintf(script, "echo Testing a checksum file...\r\n");
     fprintf(script, "echo xxhsum.exe -c unicode_test.xxh64\r\n");
     fprintf(script, "xxhsum.exe -c unicode_test.xxh64\r\n");
-
     fprintf(script, "exit /B %%ERRORLEVEL%%\r\n");
 
     fclose(script);
@@ -118,12 +112,9 @@ int main(void)
     /*
      * Some versions of MSYS, MinGW and Cygwin do not support UTF-8, and the ones that
      * don't may error with something like this:
-     *
      *    Error: Could not open '<mojibake>.unicode': No such file or directory.
-     *
      * which is an internal error that happens when it tries to convert MinGW/Cygwin
      * paths to Windows paths.
-     *
      * In that case, we bail to cmd.exe and the batch script, which supports UTF-8
      * on Windows 7 and later.
      */
@@ -147,7 +138,6 @@ int main(void)
     fprintf(script, "echo Testing a checksum file...\n");
     fprintf(script, "echo './xxhsum -c unicode_test.xxh64 || exit $?'\n");
     fprintf(script, "./xxhsum -c unicode_test.xxh64 || exit $?\n");
-
     fclose(script);
 
     return 0;
