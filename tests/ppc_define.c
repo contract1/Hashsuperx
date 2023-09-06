@@ -1,7 +1,6 @@
 /*
  * Multi-include test program
  * ensure that pixel, bool and vector are not redefined
- *
  * Copyright (C) 2020 Yann Collet
  *
  * GPL v2 License
